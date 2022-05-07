@@ -1,0 +1,246 @@
+
+
+
+
+#### [剑指 Offer II 025. 链表中的两数相加](https://leetcode-cn.com/problems/lMSNwu/)
+
+![image-20220425200417663](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220425200417663.png)
+
+
+
+
+
+```java
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode L1 = reverselist(l1);
+        ListNode L2 = reverselist(l2);
+        ListNode res = new ListNode();
+        int carry = 0;
+        ListNode cur = res;
+
+
+        while(L1 != null || L2 != null){
+            int num1 = L1 == null?0:L1.val;
+            int num2 = L2 == null?0:L2.val;
+            int sum = num1 + num2 + carry;
+            cur.next = new ListNode(sum % 10);
+            carry = sum / 10;
+            L1 = L1 == null?null:L1.next;
+            L2 = L2 == null?null:L2.next;
+            cur = cur.next;
+        }
+        //base case eg:[5] [5]
+        if(carry == 1){
+            cur.next = new ListNode(1);
+        }
+        return reverselist(res.next);
+    }
+
+
+
+
+    public ListNode reverselist(ListNode l){
+        ListNode pre = null;
+        ListNode cur = l;
+        while(cur != null){
+            ListNode temp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+}
+```
+
+**思路：**
+
+​	**1.这道题思路首先就是要有一个逆向思维：由于链表长短不齐，所以我们想通过反转链表对其进行操作。然后再反转回来。这样首先关注链表的后端就转化为正向思维，从正序开始。**
+
+​	**2.定义一个carry用来存放进1**
+
+​	**3.注意%取余数**
+
+​				**/取商。**
+
+
+
+
+
+------
+
+#### [剑指 Offer II 024. 反转链表](https://leetcode-cn.com/problems/UHnkqh/)
+
+![image-20220425200831954](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220425200831954.png)
+
+**递归的方法**
+
+
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        return recur(head,null);
+    }
+
+    public ListNode recur(ListNode cur, ListNode pre){
+        if(cur == null)return pre;
+        ListNode res = recur(cur.next,cur);
+        cur.next = pre;
+        return res;
+    }
+}
+```
+
+**迭代的方法**
+
+```java
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head;
+        while(cur != null){
+            ListNode temp = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = temp;
+        }
+        return pre;
+    }
+}
+```
+
+
+
+
+
+注意点：
+
+​	1.属于常规题目，解决的思路一般有两种：迭代和递归。
+
+​	2.递归的时候注意递归的出口：cur == null时，说明已经到达最后。然后就是举个例子，进行总结。
+
+​	3.迭代法要注意设置一个temp变量去保存cur.next.
+
+
+
+
+
+------
+
+#### [剑指 Offer 22. 链表中倒数第k个节点](https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/)
+
+![image-20220425201319452](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220425201319452.png)
+
+```java
+class Solution {
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ListNode left = head;
+        ListNode right = head;
+
+        while(k != 0){
+            right = right.next;
+            k--;
+        }
+        while(true){
+            if(right == null){
+                break;
+            } 
+            right = right.next;
+            left = left.next;
+        }
+        return left;
+    }
+}
+```
+
+**思路：**
+
+​	**1.删除倒数节点一般采用快慢指针。**
+
+​	**2.先让fast指针移动k个距离，然后fast和slow在同时移动，直到fast == null时结束循环，此时slow指向的就是所要操作的节点。**
+
+
+
+
+
+------
+
+#### [剑指 Offer II 021. 删除链表的倒数第 n 个结点](https://leetcode-cn.com/problems/SLwz0R/)
+
+
+
+![image-20220425201707870](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220425201707870.png)
+
+
+
+```java
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+
+        ListNode fast = head;
+        ListNode slow = dummyHead;
+
+        while(n-- > 0){
+            fast = fast.next;
+        }
+
+        while(fast != null){
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        slow.next = slow.next.next;
+        return dummyHead.next;
+    }
+}
+```
+
+**思路：**
+
+​	**1.一般这种删除的题目都要定义一个哑巴节点用来操作。**
+
+​	**2.剩下的思想就是快慢指针。**
+
+
+
+------
+
+#### [剑指 Offer 25. 合并两个排序的链表](https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/)
+
+
+
+#### ![image-20220425201847447](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220425201847447.png)
+
+```java
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode res = new ListNode();
+        ListNode start = res;
+        if(l1 == null || l2 == null)return l1==null?l2:l1;
+        while(l1 != null && l2 != null){
+            if(l1.val >= l2.val){
+                res.next = l2;
+                l2 = l2.next;
+            }else{
+                res.next= l1;
+                l1 = l1.next;
+            }
+            res = res.next;
+        }
+        res.next = (l1 == null)?l2:l1;
+        return start.next;
+    }
+}
+```
+
+**思路：**
+
+​	**1.题目比较简单，思路也很好想，就是需要注意的点比较多。**
+
+​	**2.一开始需要对两个链表做一个初步的判断。**
+
+​	**3.结束时也要进行一次非空判断。**

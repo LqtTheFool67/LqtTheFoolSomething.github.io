@@ -1,0 +1,196 @@
+**Leetcode剑指offer05[替换空格](https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/)**
+
+![image-20220424205426073](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220424205426073.png)
+
+```java
+class Solution {
+    public String replaceSpace(String s) {
+        StringBuffer sb = new StringBuffer();
+        for(char c : s.toCharArray()){
+            if(c == ' '){
+                sb.append("%20");
+            }else{
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+}
+```
+
+**这种题目替换问题一般都是用StrinBuffer或者StringBuilder中的append()方法。**
+
+------
+
+
+
+***leetcode[14. 最长公共前缀](https://leetcode-cn.com/problems/longest-common-prefix/)****
+
+![image-20220424205726771](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220424205726771.png)
+
+
+
+```java
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        //base case
+        if(strs.length == 0)return "";
+
+        //random choose one for the key
+        String s = strs[0];
+        for(String string : strs){
+            while(!string.startsWith(s)){
+                if(string == ""){
+                    return "";
+                }
+            s = s.substring(0,s.length() - 1);
+            }
+        }
+        return s;
+    }
+}
+```
+
+**解决思路：**
+
+​	**公共前缀一定是小于或者等于当前字符串数组中的每个元素的，不妨先假设公共前缀就是数组中第一个元素。如果不是，每一次就将其减一，直到找到公共前缀。**
+
+**注意点：用好API:    	startWIth()  && substring()**.
+
+
+
+
+
+------
+
+#### [125. 验证回文串](https://leetcode-cn.com/problems/valid-palindrome/)
+
+
+
+![image-20220424210215834](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220424210215834.png)
+
+
+
+```java
+class Solution {
+    public boolean isPalindrome(String s) {
+        StringBuffer sb = new StringBuffer();
+        s = s.toLowerCase();
+        for(char str : s.toCharArray()){
+            if((str >= '0' && str <= '9') || (str >='a' && str <= 'z')){
+                sb.append(str);
+            }
+        }
+        String temp = sb.toString();
+        int left = 0 ;
+        int right = temp.length() - 1;
+        while(left <= right){
+            if(temp.charAt(left) == temp.charAt(right)){
+                left++;
+                right--;
+            }else{
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+**注意点：**
+
+**1.注意将字符串进行统一**
+
+**2.不要一见到回文串就想着用动态规划解决，有时候并不是最优解，比如这道题目，用双指针就可以很快的解决。**
+
+
+
+
+
+------
+
+#### [剑指 Offer II 085. 生成匹配的括号](https://leetcode-cn.com/problems/IDBivT/)
+
+
+
+![image-20220424210550073](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220424210550073.png)
+
+```java
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        dfs("",n,n,res);
+        return res;
+    }   
+
+
+    public void dfs(String sb, int left, int right, List<String> res){
+        if(left > right)return;
+        if(left == 0 && right == 0)res.add(sb);
+        if(left > 0) dfs(sb + '(',left - 1,right,res);
+        if(right > 0)dfs(sb + ')',left,right - 1,res);
+    }
+}
+```
+
+**注意点：**
+
+​	**1.对于这种题目一般都可以通过暴力解法（递归，回溯）进行解决，本体就是dfs递归入门题目。体会递归都在做什么事。**
+
+​	**2.递归一定要找好递归的出口：本题为例 ---->递归的出口是左括号的数量 > 右括号的数量。**
+
+
+
+------
+
+#### [剑指 Offer 46. 把数字翻译成字符串](https://leetcode-cn.com/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/)
+
+
+
+------
+
+#### [剑指 Offer 67. 把字符串转换成整数](https://leetcode-cn.com/problems/ba-zi-fu-chuan-zhuan-huan-cheng-zheng-shu-lcof/)
+
+
+
+
+
+------
+
+#### [242. 有效的字母异位词](https://leetcode-cn.com/problems/valid-anagram/)
+
+
+
+![image-20220426214007658](C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20220426214007658.png)
+
+
+
+```java
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if(s.length() != t.length()){
+            return false;
+        }
+
+        int[] alpha = new int[26];
+        for(int i = 0 ; i < s.length(); i++){
+            alpha[s.charAt(i) - 'a']++;
+            alpha[t.charAt(i) - 'a']--;
+        }
+
+        for(int i = 0 ; i < 26 ;i++){
+            if(alpha[i] != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+```
+
+**注意点：**
+
+​	**1.常规解决方法**
+
+​	**2.s 负责在对应位置增加，t 负责在对应位置减少。如果哈希表的值都为 0，则二者是字母异位词。**
+
